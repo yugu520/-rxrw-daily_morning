@@ -40,7 +40,7 @@ def get_birthday():
 
 def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
-  print("words.status_code：" + words.status_code)
+  print("words.status_code：" + str(words.status_code))
   if words.status_code != 200:
     return get_words()
   return words.json()['data']['text']
