@@ -43,6 +43,7 @@ def get_words():
   print("words.status_code：" + str(words.status_code))
   if words.status_code != 200:
     return get_words()
+  print(words.json()['data']['text'])
   return words.json()['data']['text']
 
 def get_random_color():
