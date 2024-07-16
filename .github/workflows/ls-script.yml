@@ -25,5 +25,5 @@ jobs:
     env:
       APP_ID: ${{ secrets.APP_ID }}
       APP_SECRET: ${{ secrets.APP_SECRET }}
-      TEMPLATE_ID: ${{ secrets.TEMPLATE_ID2 }}
+      TEMPLATE_ID2: ${{ secrets.TEMPLATE_ID2 }}
       USER_ID: ${{ secrets.USER_ID }}
