@@ -1,0 +1,38 @@
+from datetime import date, datetime
+import math
+from wechatpy import WeChatClient
+from wechatpy.client.api import WeChatMessage, WeChatTemplate
+import requests
+import os
+import random
+
+today = datetime.now()
+start_date = os.environ['START_DATE']
+city = os.environ['CITY']
+birthday = os.environ['BIRTHDAY']
+
+app_id = os.environ["APP_ID"]
+app_secret = os.environ["APP_SECRET"]
+
+user_ids = os.environ["USER_ID"]
+template_id = os.environ["TEMPLATE_ID"]
+
+
+def get_weather():
+  url = "https://restapi.amap.com/v3/weather/weatherInfo?key=eeb15c5bfd597258152abaf5cf300c33&city=469028&extensions=all"
+  print('获取天气url：',url)
+  res = requests.get(url)
+  print('获取天气结果：',res)
+  print('获取天气结果JSON：',res.json())
+  weather = res.json()['forecasts'][0]
+  return weather['city'], weather['casts']
+
+client = WeChatClient(app_id, app_secret)
+
+wm = WeChatMessage(client)
+city, casts = get_weather()
+data = {"city":{"value":city},"date0":{"value":casts[0]['date']},"date1":{"value":casts[1]['date']},"date2":{"value":casts[2]['date']},"date3":{"value":casts[3]['date']},"dayweather0":{"value":casts[0]['dayweather']},"dayweather1":{"value":casts[1]['dayweather']},"dayweather2":{"value":casts[2]['dayweather']},"dayweather3":{"value":casts[3]['dayweather']},"daytemp0":{"value":casts[0]['daytemp_float']},"daytemp1":{"value":casts[1]['daytemp_float']},"daytemp2":{"value":casts[2]['daytemp_float']},"daytemp3":{"value":casts[3]['daytemp_float']}}
+user_id_list = user_ids.split(",")
+for user_id in user_id_list:
+  res = wm.send_template(user_id, template_id, data)
+  print(res)
